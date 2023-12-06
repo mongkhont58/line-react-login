@@ -12,16 +12,16 @@ function App() {
   const [userId, setUserId] = useState("");
 
   const logout = () => {
-    liff.logout();
-    window.location.reload();
+    liff.logout()
+    window.location.reload()
   }
 
   const initLine = () => {
     liff.init({ liffId: '2002051569-0wJggwro' }, () => {
       if (liff.isLoggedIn()) {
-        runApp();
+        runApp()
       } else {
-        liff.login();
+        liff.login()
       }
     }, err => console.error(err));
   }
@@ -30,31 +30,37 @@ function App() {
     const idToken = liff.getIDToken();
     setIdToken(idToken);
     liff.getProfile().then(profile => {
-      console.log(profile);
       setDisplayName(profile.displayName);
       setPictureUrl(profile.pictureUrl);
       setStatusMessage(profile.statusMessage);
       setUserId(profile.userId);
-    }).catch(err => console.error(err));
+    }).catch(err => {
+      console.error(err)
+      logout()
+    })
   }
 
   useEffect(() => {
-    initLine();
-  }, []);
+    initLine()
+  }, [])
 
   return (
     <div className="App">
       <header className="App-header">
         <div style={{ textAlign: "center" }}>
           <h1>React with LINE Login test bot1</h1>
+          {/* {idToken ? '' :
+            <button onClick={() => initLine()} style={{ width: "100%", height: 50 }}>Login</button>
+          } */}
           <hr />
           <img src={pictureUrl} width="300px" height="300px" />
           <p style={{ textAlign: "left", marginLeft: "20%", marginRight: "20%", wordBreak: "break-all" }}><b>id token: </b> {idToken}</p>
           <p style={{ textAlign: "left", marginLeft: "20%", marginRight: "20%", wordBreak: "break-all" }}><b>display name: </b> {displayName}</p>
           <p style={{ textAlign: "left", marginLeft: "20%", marginRight: "20%", wordBreak: "break-all" }}><b>status message: </b> {statusMessage}</p>
           <p style={{ textAlign: "left", marginLeft: "20%", marginRight: "20%", wordBreak: "break-all" }}><b>user id: </b> {userId}</p>
-
-          <button onClick={() => logout()} style={{ width: "100%", height: 30 }}>Logout</button>
+          {/* {idToken ? <button onClick={() => logout()} style={{ width: "100%", height: 50 }}>Logout</button>
+            : ''
+          } */}
         </div>
       </header>
     </div>
