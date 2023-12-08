@@ -71,7 +71,9 @@ function App() {
           <p style={{ textAlign: "left", marginLeft: "20%", marginRight: "20%", wordBreak: "break-all" }}><b>Decoded: </b> {decodedBarcode}</p>
           <p style={{ textAlign: "left", marginLeft: "20%", marginRight: "20%", wordBreak: "break-all" }}><b>Lat: </b> {locationAccess.lat}</p>
           <p style={{ textAlign: "left", marginLeft: "20%", marginRight: "20%", wordBreak: "break-all" }}><b>Lng: </b> {locationAccess.lng}</p>
-
+          <a href='https://lin.ee/RG2Z5am'>
+            <img src={require('./assets/button-line-new.png')} width="300px" height="50px" alt='logo' />
+          </a>
           <h1>Information</h1>
           <hr />
           <img src={pictureUrl} width="300px" height="300px" alt='logo' />
