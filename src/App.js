@@ -14,6 +14,12 @@ function App() {
   const [locationAccess, setLocationAccess] = useState({ lat: '', lng: '' })
 
   useEffect(() => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      setLocationAccess({ lat: position.coords.latitude, lng: position.coords.longitude })
+    })
+  }, [])
+
+  useEffect(() => {
     initLine()
   })
 
@@ -29,24 +35,20 @@ function App() {
       } else {
         liff.login()
       }
-    }, err => console.error(err));
+    }, err => console.error(err))
   }
 
   const runApp = () => {
-    const idToken = liff.getIDToken();
-    setIdToken(idToken);
+    const idToken = liff.getIDToken()
+    setIdToken(idToken)
     liff.getProfile().then(profile => {
-      setDisplayName(profile.displayName);
-      setPictureUrl(profile.pictureUrl);
-      setStatusMessage(profile.statusMessage);
-      setUserId(profile.userId);
+      setDisplayName(profile.displayName)
+      setPictureUrl(profile.pictureUrl)
+      setStatusMessage(profile.statusMessage)
+      setUserId(profile.userId)
     }).catch(err => {
       console.error(err)
       logout()
-    })
-
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setLocationAccess({ lat: position.coords.latitude, lng: position.coords.longitude })
     })
   }
 
