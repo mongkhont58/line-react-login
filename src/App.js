@@ -12,16 +12,11 @@ function App() {
   const [userId, setUserId] = useState("");
   const [decodedBarcode, setDecodeBarcode] = useState('')
   const [locationAccess, setLocationAccess] = useState({ lat: '', lng: '' })
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setLocationAccess({ lat: position.coords.latitude, lng: position.coords.longitude })
-    })
-  }, [])
+  const [errorState, setErrorState] = useState('')
 
   useEffect(() => {
     initLine()
-  })
+  }, [])
 
   const logout = () => {
     liff.logout()
@@ -35,13 +30,19 @@ function App() {
       } else {
         liff.login()
       }
-    }, err => console.error(err))
+    }, err => {
+      console.error(err)
+      setErrorState(err)
+    })
   }
 
   const runApp = () => {
     const idToken = liff.getIDToken()
     setIdToken(idToken)
     liff.getProfile().then(profile => {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        setLocationAccess({ lat: position.coords.latitude, lng: position.coords.longitude })
+      })
       setDisplayName(profile.displayName)
       setPictureUrl(profile.pictureUrl)
       setStatusMessage(profile.statusMessage)
@@ -60,10 +61,22 @@ function App() {
     }
   }
 
+  const [qrCodeData, setQrCodeData] = useState('');
+  const handleScan = () => {
+    liff.scanCodeV2().then((result) => {
+      setQrCodeData(result.value ?? '');
+    });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <div style={{ textAlign: "center" }}>
+          <div>
+            <p>Error: {errorState}</p>
+          </div>
+          <button onClick={handleScan}>Scan QR Code</button>
+          <p>{qrCodeData}</p>
           <Html5QrcodePlugin
             fps={10}
             qrbox={250}
